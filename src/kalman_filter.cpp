@@ -18,20 +18,16 @@ void KalmanFilter::Init(VectorXd &x_in, MatrixXd &P_in, MatrixXd &F_in,
 }
 
 void KalmanFilter::Predict() {
-  /**
-  TODO:
-    * predict the state
-  */
+
+  //predict the state
   x_ = F_ * x_;
   MatrixXd Ft = F_.transpose();
   P_ = F_ * P_ * Ft + Q_;
 }
 
 void KalmanFilter::Update(const VectorXd &z) {
-  /**
-  TODO:
-    * update the state by using Kalman Filter equations
-  */
+
+  // update the state by using Kalman Filter equations
   VectorXd z_pred = H_ * x_;
   VectorXd y = z - z_pred;
   MatrixXd Ht = H_.transpose();
@@ -47,11 +43,10 @@ void KalmanFilter::Update(const VectorXd &z) {
 }
 
 void KalmanFilter::UpdateEKF(const VectorXd &z) {
-  /**
-  TODO:
-    * update the state by using Extended Kalman Filter equations
-  */
-  float px = x_(0);
+
+  //update the state by using Extended Kalman Filter equations
+
+  float px = x_(0); //Spare this and next line for eff. Keep for readability
   float py = x_(1);
   float c1 = px*px+py*py;
 
@@ -60,14 +55,17 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
 
     c1 = 0.0001;
   }
-
+  //set h(x') matrix (here z_pred) with state vector values. Cartesian to polar coordinates.
   VectorXd z_pred = VectorXd(3);
   z_pred(0) = sqrt(c1);
   z_pred(1) = atan2(py, px);
   z_pred(2) = (px*x_(2) + py*x_(3))/z_pred(0);
 
   VectorXd y = z - z_pred;
+
+  //normalize y(1) values so that output is between PI and -PI
   y(1) = fmod(y(1), M_PI);
+
   MatrixXd Ht = H_.transpose();
   MatrixXd S = H_ * P_ * Ht + R_;
   MatrixXd Si = S.inverse();
