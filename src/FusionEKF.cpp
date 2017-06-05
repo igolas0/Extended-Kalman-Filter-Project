@@ -17,38 +17,32 @@ FusionEKF::FusionEKF() {
   previous_timestamp_ = 0;
 
   // initializing matrices
-  MatrixXd R_laser_;
-  R_laser_ = MatrixXd(2, 2);
+  MatrixXd R_laser_ = MatrixXd(2, 2);
   //measurement covariance matrix - laser
   R_laser_ << 0.0225, 0,
               0, 0.0225;
 
-  MatrixXd H_laser_;
-  H_laser_ = MatrixXd(2, 4);
+  MatrixXd H_laser_ = MatrixXd(2, 4);
   H_laser_ << 1, 0, 0, 0,
               0, 1, 0, 0;
 
-  VectorXd x_;
-  x_ = VectorXd(4);
+  VectorXd x_ = VectorXd(4);
   x_ << 1, 1, 1, 1;
 
-  MatrixXd P_;
-  P_ = MatrixXd(4,4);
+  MatrixXd P_ = MatrixXd(4,4);
   P_ << 1, 0, 0, 0,
         0, 1, 0, 0,
         0, 0, 1000, 0,
         0, 0, 0, 1000;
 
-  MatrixXd F_;
-  F_ = MatrixXd(4,4);
+  MatrixXd F_ = MatrixXd(4,4);
   F_ << 1, 0, 1, 0,
         0, 1, 0, 1,
         0, 0, 1, 0,
         0, 0, 0, 1;
 
 
-  MatrixXd Q_;
-  Q_ = MatrixXd(4, 4);
+  MatrixXd Q_ = MatrixXd(4, 4);
   Q_ <<  0, 0, 0, 0,
          0, 0, 0, 0,
          0, 0, 0, 0,
@@ -135,8 +129,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       ekf_.H_ = tools.CalculateJacobian(ekf_.x_);
 
       //define R_laser and set variable of kalman object
-      MatrixXd R_radar_;
-      R_radar_ = MatrixXd(3, 3);
+      MatrixXd R_radar_ = MatrixXd(3, 3);
       //measurement covariance matrix - radar
       R_radar_ << 0.09, 0, 0,
                   0, 0.0009, 0,
@@ -148,15 +141,13 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     // Laser updates
 
       //define H_laser and set variable of kalman object
-      MatrixXd H_laser_;
-      H_laser_ = MatrixXd(2, 4);
+      MatrixXd H_laser_ = MatrixXd(2, 4);
       H_laser_ << 1, 0, 0, 0,
                   0, 1, 0, 0;
       ekf_.H_ = H_laser_;
 
       //define R_laser and set variable of kalman object
-      MatrixXd R_laser_;
-      R_laser_ = MatrixXd(2, 2);
+      MatrixXd R_laser_ = MatrixXd(2, 2);
       //measurement covariance matrix - laser
       R_laser_ << 0.0225, 0,
                   0, 0.0225;
